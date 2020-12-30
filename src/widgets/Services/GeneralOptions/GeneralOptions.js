@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import Services from "./../Services";
 
 const GeneralOptions = (props) => {
@@ -15,7 +15,7 @@ const GeneralOptions = (props) => {
     },
     {
       name: "Add Beneficiary",
-      handler: props.actionProvider.handleAddBeneficiary,
+      handler: props.actionProvider.handleAddBen,
       id: 3,
     },
     {

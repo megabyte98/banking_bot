@@ -1,7 +1,10 @@
 import React from "react";
 import { createChatBotMessage } from "react-chatbot-kit";
 import GeneralOptions from "./widgets/Services/GeneralOptions/GeneralOptions";
-import BeneficiarySelector from "./widgets/Beneficiary/BeneficiarySelector";
+import FundForm from "./widgets/Forms/fundForm";
+import AddBenForm from "./widgets/Forms/beneficiaryForm";
+import Login from "./widgets/Forms/user";
+
 
 const botName = "FinBot";
 
@@ -18,27 +21,38 @@ const config = {
   },
   initialMessages: [createChatBotMessage(`Hi I'm ${botName}. I’m here to help you with your finances.`),
   createChatBotMessage(
-    "Here are the services provided by me.",
+    "Please Login !!",
     {
       withAvatar: false,
       delay: 500,
-      widget: "GeneralOptions",
+      widget: "Login",
     }
   ),   
 ],
 state: {
-  selectedBeneficiary : "",
+  userId : ""
 },
 customComponents: {},
 widgets: [
   {
-    widgetName: "BeneficiarySelector",
-    widgetFunc: (props) => <BeneficiarySelector {...props} />,
-    mapStateToProps: ["selectedBeneficiary"],
+    widgetName: "FundForm",
+    widgetFunc: (props,state) => <FundForm {...props} />,
+    mapStateToProps: ["userId"],
   },
   {
     widgetName: "GeneralOptions",
-    widgetFunc: (props) => <GeneralOptions {...props} />,
+    widgetFunc: (props,state) => <GeneralOptions {...props} />,
+    mapStateToProps: ["userId"],
+  },
+  {
+    widgetName: "AddBenForm",
+    widgetFunc: (props,state) => <AddBenForm {...props} />,
+    mapStateToProps: ["userId"],
+  },
+  {
+    widgetName: "Login",
+    widgetFunc: (props,state) => <Login {...props} />,
+    mapStateToProps: ["userId"],
   },
 ],
 };

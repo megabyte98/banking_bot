@@ -7,14 +7,48 @@ class ActionProvider {
       this.createClientMessage = createClientMessage;
     }
 
-    handleBalance = async () => {
+    handleLogin = async () => {
+      const message = this.createChatBotMessage(
+        "Enter your Credentials to avail our Services " ,
+        {
+          withAvatar: true,
+          widget: "Login",
+        }
+      );
+      this.addMessageToBotState(message)
+    }
+
+    handleInvalid = async () => {
+      const message = this.createChatBotMessage(
+      "Invalid Credentials , Please try again !!" ,
+        {
+          withAvatar: true,
+          widget: "Login",
+        }
+      );
+      this.addMessageToBotState(message)
+    }
+
+    handleLogOut = async (state) => {
+      this.setState((state) => ({...state,userId : ""}) )
+      const message = this.createChatBotMessage(
+      "Thank You For Using our Services !!" ,
+        {
+          withAvatar: true,
+          widget: "Login",
+        }
+      );
+      this.addMessageToBotState(message)
+    }
+
+    handleBalance = async (userId) => {
       try{
         const config = {
           headers: {
               'Content-Type': 'application/json'
           }
       }
-        const res=await axios.get('http://localhost:5000/api/balance/1',config);
+        const res=await axios.get(`http://localhost:5000/api/balance/${userId}`,config);
         console.log(res.data); 
         const message = this.createChatBotMessage(
           `your available balance is INR ${res.data.curBal}`
@@ -25,14 +59,25 @@ class ActionProvider {
       }
     }
 
-    handleMiniStatement = async () => {
+    handleAddBen = () => {
+      const message = this.createChatBotMessage(
+        "Enter Following details for adding Beneficiary " ,
+        {
+          withAvatar: true,
+          widget: "AddBenForm",
+        }
+      );
+      this.addMessageToBotState(message)
+    }
+
+    handleMiniStatement = async (userId) => {
       try{
         const config = {
           headers: {
               'Content-Type': 'application/json'
           }
       }
-        const res=await axios.get('http://localhost:5000/api/statement/1',config);
+        const res=await axios.get(`http://localhost:5000/api/statement/${userId}`,config);
         console.log(res.data);
         if(res.data.length > 0){
           const message = this.createChatBotMessage(
@@ -60,42 +105,76 @@ class ActionProvider {
     }
 
     handleFundTransfer =async () => {
-      try{
-        const config = {
-          headers: {
-              'Content-Type': 'application/json'
-          }
-      }
-        const res=await axios.get('http://localhost:5000/api/ben/allBen/2',config);
-        // console.log(res.data); 
-        if(res.data.length > 0){
-          const message = this.createChatBotMessage(
-            "Please Select/Add a Beneficiary to initiate fund transfer",
-            {
-              withAvatar: true,
-              widget: "BeneficiarySelector",
-            }
-          ); 
-          this.addMessageToBotState(message) 
+      const message = this.createChatBotMessage(
+        "Enter following details for Fund Transfer " ,
+        {
+          withAvatar: false,
+          widget: "FundForm",
         }
-        else{
-          const message = this.createChatBotMessage(
-            "Please Add a Beneficiary to initiate fund transfer",
-            {
-              withAvatar: true,
-              widget: "GeneralOptions",
-            }
-          ); 
-          this.addMessageToBotState(message) 
-        }
-      }catch(err){
-        console.log(err)
-      }
+      );
+      this.addMessageToBotState(message)
     }
 
-    handleInitiate = () => {
+
+    handleSuccessful = () => {
       const message = this.createChatBotMessage(
-        "Enter The amount to be transfered ",
+        "Transaction Successfull",
+      );
+      this.addMessageToBotState(message)
+      
+      const message1 = this.createChatBotMessage(
+        "How can I help? Here are the available services",
+        {
+          withAvatar: true,
+          widget: "GeneralOptions",
+        }
+      );
+      this.addMessageToBotState(message1)
+    };
+
+    handleSuccessfulBen = () => {
+      const message = this.createChatBotMessage(
+        "Benefficiary Added successfully , initiating Fund Trasfer",
+        {
+          withAvatar: false,
+          widget: "FundForm",
+        }
+      );
+      this.addMessageToBotState(message)
+      
+    };
+
+
+    handleFailFund = () => {
+      const message = this.createChatBotMessage(
+        "Insufficient Fund For Transaction !",
+        {
+          withAvatar: true,
+          widget: "GeneralOptions",
+        }
+      );
+      this.addMessageToBotState(message)
+    };
+
+    handleMinBal = () => {
+      const message = this.createChatBotMessage(
+        "Minimum balance INR !00 to retain in account",
+        {
+          withAvatar: true,
+          widget: "GeneralOptions",
+        }
+      );
+      this.addMessageToBotState(message)
+    };
+
+
+    handleFail = () => {
+      const message = this.createChatBotMessage(
+        "Please add the beneficiary before transaction",
+        {
+          withAvatar: true,
+          widget: "AddBenForm",
+        }
       );
       this.addMessageToBotState(message)
     };
